@@ -61,6 +61,11 @@ export default class MoviesDAO {
       // and _id. Do not put a limit in your own implementation, the limit
       // here is only included to avoid sending 46000 documents down the
       // wire.
+      // here's the find query with query predicate and field projection
+      // cursor = await movies
+      //    .find({ countries: { $in: countries } })
+      //    .project({ title: 1 })
+      //
       const searchCountry = Array.isArray(countries) ? countries : countries.split(", ")
 
       cursor = await movies.find({ countries: { $in: searchCountry} }, { projection: {title: 1} })
