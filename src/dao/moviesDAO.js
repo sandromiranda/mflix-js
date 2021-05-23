@@ -62,13 +62,13 @@ export default class MoviesDAO {
       // here is only included to avoid sending 46000 documents down the
       // wire.
       // here's the find query with query predicate and field projection
-      // cursor = await movies
-      //    .find({ countries: { $in: countries } })
-      //    .project({ title: 1 })
-      //
-      const searchCountry = Array.isArray(countries) ? countries : countries.split(", ")
+      cursor = await movies
+        .find({ countries: { $in: countries } })
+        .project({ title: 1 })
 
-      cursor = await movies.find({ countries: { $in: searchCountry} }, { projection: {title: 1} })
+      //this is what I did and worked:
+      //const searchCountry = Array.isArray(countries) ? countries : countries.split(", ")
+      //cursor = await movies.find({ countries: { $in: searchCountry} }, { projection: {title: 1} })
     } catch (e) {
       console.error(`Unable to issue find command, ${e}`)
       return []
@@ -303,9 +303,9 @@ export default class MoviesDAO {
       const pipeline = [
         {
           $match: {
-            _id: ObjectId(id)
-          }
-        }
+            _id: ObjectId(id),
+          },
+        },
       ]
       return await movies.aggregate(pipeline).next()
     } catch (e) {
